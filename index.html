@@ -64,34 +64,53 @@
 
 <div class="wrapper">
     <div class="item_title">
-        <span class="span_text">一起再见同济</span>
-        <span class="time_text">— — 2023.03.21</span>
+        <span class="span_text">我们的日常</span>
+        <span class="time_text">— — ~2023.10.30~</span>
     </div>
     <section>
-        <div ms-for="img in @img_1_list" class="img_layout flex_img" :mouseenter="@show_photo_desc(img)"
-             ms-mouseleave="@hide_photo_desc(img)"
+        <div ms-for="img in @img_1_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
+             ms-mouseleave="@cancel_select(img)"
              ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_middle_image(img)">
             <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
             <img :attr="{src: img.small, alt: img.desc}" class="img">
             <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.id + 'desc'}">
                 <h4 class="desc_text">{{img.name}}</h4>
-                <p class="desc_text">{{img.desc}}</p></div>
+                <p class="desc_text">{{img.desc}}</p>
+            </div>
         </div>
     </section>
 
     <div class="item_title">
-        <span class="span_text">一起再见同济</span>
-        <span class="time_text">— — 2023.03.21</span>
+        <span class="span_text">山城跨年</span>
+        <span class="time_text">— — 2023.01.01</span>
     </div>
     <section>
-        <div ms-for="img in @img_1_list" class="img_layout flex_img" :mouseenter="@show_photo_desc(img)"
-             ms-mouseleave="@hide_photo_desc(img)"
+        <div ms-for="img in @img_2_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
+             ms-mouseleave="@cancel_select(img)"
              ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_middle_image(img)">
             <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
             <img :attr="{src: img.small, alt: img.desc}" class="img">
             <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.id + 'desc'}">
                 <h4 class="desc_text">{{img.name}}</h4>
-                <p class="desc_text">{{img.desc}}</p></div>
+                <p class="desc_text">{{img.desc}}</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="item_title">
+        <span class="span_text">心照而宣</span>
+        <span class="time_text">— — 2022.10.30</span>
+    </div>
+    <section>
+        <div ms-for="img in @img_3_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
+             ms-mouseleave="@cancel_select(img)"
+             ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_middle_image(img)">
+            <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
+            <img :attr="{src: img.small, alt: img.desc}" class="img">
+            <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.id + 'desc'}">
+                <h4 class="desc_text">{{img.name}}</h4>
+                <p class="desc_text">{{img.desc}}</p>
+            </div>
         </div>
     </section>
 
@@ -100,10 +119,10 @@
             <img src="images/loading.gif" class="load_image">
         </div>
         <img :attr="{src: @show_image_url}" class="middle_image" id="middle_image" ondblclick="hide_image()">
-        <div class="middle_image_desc" id="middle_image_desc">
+        <!-- <div class="middle_image_desc" id="middle_image_desc">
             <h4 class="middle_desc_text">{{middle_image_name}}</h4>
             <p class="middle_desc_text">{{middle_image_desc}}</p>
-        </div>
+        </div> -->
     </div>
 </div>
 

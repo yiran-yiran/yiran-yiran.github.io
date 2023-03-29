@@ -40,7 +40,6 @@ section::after {
 }
 .img_layout {
   margin: 2px;
-  background-color: rgb(153, 194, 241);
   position: relative;
 }
 i{
@@ -52,6 +51,7 @@ i{
   top: 0;
   width: 100%;
   vertical-align: bottom;
+  border: 0.5mm ridge rgba(66, 67, 75, 0.6);
 }
 
 .flex_img {
@@ -96,15 +96,15 @@ i{
     height: auto;
     position: absolute;
     display: block;
-
 }
+
 .middle_image{
     text-align: center;
-    margin: 0 auto;
-    width: 80%;
+    margin: auto;
+    /* width: 80%; */
     box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.4),0px 0px 20px 4px rgba(0,0,0,0.4);
     display: block;
-    border-radius: 25px;
+    border-radius: 5px;
     background-color: violet;
     float: left;
 }
