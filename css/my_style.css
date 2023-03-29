@@ -8,6 +8,14 @@
     text-transform: uppercase;
     /* font-family: 'Great Vibes', cursive; */
 }
+
+.music_controls {
+    position: absolute;
+    width: 8%;
+    height: 6%;
+    top: 90%;
+}
+
 .count_day {
     font-size: 38px !important;
     text-align: center;
@@ -61,7 +69,7 @@ i{
 
 .item_title {
     width: 99%;
-    margin: 10px auto;
+    margin: 20px 0px 10px 0px;
     background-color: rgb(69, 73, 77);
     border: 1mm ridge rgba(69, 73, 77, 0.6);
     border-radius:5px;

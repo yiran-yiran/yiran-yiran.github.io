@@ -88,17 +88,17 @@ $(document).ready(function () {
     $('#middle_picture').fadeOut({
         duration: 10
     });
-    var index = 1;
+    
+    change_music();
     setInterval(function () {
-        var attr = "url('pictures/back/" + index + ".jpg')";
-        // var attr = "url('http://www.xiaomaidong.com/fuyuko/images/back_" + index + ".png')";
-        console.log(attr);
-        $('.banner').css("background-image", attr);
-        index += 1;
-        if (index > 6) {
-            index = 1;
-        }
+        change_music();
+    }, 300000)
+
+    change_background();
+    setInterval(function () {
+        change_background();
     }, 20000);
+
     get_days()
     setInterval(function () {
         get_days();
@@ -138,7 +138,31 @@ function get_days() {
     $('#count_day').html(days + ' days ' + hour + 'h ' + min + 'm ' + sec + 's')
 }
 
+function change_background() {
+    var attr = "url('pictures/back/" + randomNum(1, 6) + ".jpg')";
+    $('.banner').css("background-image", attr);
+}
 
+function change_music() {
+    var music_src = "music/" + randomNum(1, 3) + ".mp3";
+    console.log(music_src)
+    var audio = document.getElementsByTagName('audio')[0];
+    audio.src = music_src;
+}
+
+function randomNum(minNum, maxNum){ 
+    switch(arguments.length){ 
+        case 1: 
+            return parseInt(Math.random() * minNum + 1, 10); 
+        break; 
+        case 2: 
+            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10); 
+        break; 
+        default: 
+            return 0; 
+        break; 
+    } 
+} 
 
 
 
