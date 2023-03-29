@@ -38,21 +38,25 @@ var vm = avalon.define({
                 duration: 500
             });
             vm.load_image = true;
-            pic.css('top', win_height + 50 + 'px');
+            if (img.small_height > img.small_width) {
+                pic.css('top', win_height + 'px');
+            } else {
+                pic.css('top', win_height + 50 + 'px');
+            }
             var img_dom = $('#middle_image');
             vm.load_image = false;
             if (img.small_height > img.small_width) {
                 img_dom.css('margin-left',  $(window).width() * 0.45 - img.middle_width * 0.2 + 'px');
-                // img_dom.animate({height: img.middle_height * 0.4 + 'px'});
-                // img_dom.animate({width: img.middle_width * 0.4 + 'px'});
-                img_dom.css('height', img.middle_height * 0.4 + 'px');
-                img_dom.css('width', img.middle_width * 0.4 + 'px');
+                img_dom.animate({height: img.middle_height * 0.4 + 'px'});
+                img_dom.animate({width: img.middle_width * 0.4 + 'px'});
+                // img_dom.css('height', img.middle_height * 0.4 + 'px');
+                // img_dom.css('width', img.middle_width * 0.4 + 'px');
             } else {
                 img_dom.css('margin-left',  $(window).width() * 0.45 - img.middle_width * 0.2 + 'px');
-                // img_dom.animate({height: img.middle_height * 0.4 + 'px'});
-                // img_dom.animate({width: img.middle_width * 0.4 + 'px'});
-                img_dom.css('height', img.middle_height * 0.4 + 'px');
-                img_dom.css('width', img.middle_width * 0.4 + 'px');
+                img_dom.animate({height: img.middle_height * 0.4 + 'px'});
+                img_dom.animate({width: img.middle_width * 0.4 + 'px'});
+                // img_dom.css('height', img.middle_height * 0.4 + 'px');
+                // img_dom.css('width', img.middle_width * 0.4 + 'px');
             }
         }
     },
