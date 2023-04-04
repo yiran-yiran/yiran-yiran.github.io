@@ -2,101 +2,109 @@ import cv2
 import numpy as np
 import os
 import json
+import shutil
 
-class ConvertImage(object):
+
+def check_path(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+
+class PicturesPreprocess:
     def __init__(self, data_path, save_path):
-        self.__data_path = data_path
-        self.__save_path = save_path
-        self.image_json = []
-        # self.request_base_dir = 'http://www.xiaomaidong.com/fuyuko/images/'
-        self.request_base_dir = 'pictures/' + save_path
-        self.small_url = ''
-        self.middle_url = ''
-        self.list_image()
+        self._data_path = data_path
+        self._save_path = save_path
+        self._small_size = 300
+        self._large_size = 1800
+        self._img_base_dir = 'pictures'
+        self._json_path = '../js'
 
+        if os.path.exists(self._save_path):
+            shutil.rmtree(self._save_path)
+        check_path(self._save_path)
+        self.process_data()
+        return 
 
-    def resize_picture(self, image, image_name):
-        image_info = {}
-        shape = np.shape(image)
-        print(shape)
-        small_shape = self.get_small_shape(shape)
-        small_image = cv2.resize(image, small_shape)
+    def process_data(self):
+        if not os.path.exists(self._data_path):
+            print('Error, invalid input source data path : ', self._data_path)
+            return
+        image_json = []
+        clique_item = os.listdir(self._data_path)
+        for item in clique_item:
+            item_save_path = os.path.join(self._save_path, item)
+            item_save_small_path = os.path.join(item_save_path, 'small')
+            item_save_large_path = os.path.join(item_save_path, 'large')
+            check_path(item_save_path)
+            check_path(item_save_small_path)
+            check_path(item_save_large_path)
 
-        # cv2.imshow(image_name, small_image)
-        cv2.imwrite(self.__small_path + '/' + image_name, small_image)
-        middle_shape = self.get_middle_shape(shape)
-        middle_image = cv2.resize(image, middle_shape)
-        cv2.imwrite(self.__middle_path + '/' + image_name, middle_image)
+            item_path = os.path.join(self._data_path, item)
+            print('Processing ', item_path, ', which contains ', len(os.listdir(item_path)), ' files')
+            for file_name in os.listdir(item_path):
+                if not file_name.endswith(('.jpg', '.png')):
+                    continue
+                file_path = os.path.join(item_path, file_name)
+                img = cv2.imread(file_path)
+                if len(img) == 0:
+                    continue
+                small_img, large_img = self.convert_image(img)
+                small_path = os.path.join(item_save_small_path, file_name) 
+                large_path = os.path.join(item_save_large_path, file_name) 
+                cv2.imwrite(small_path, small_img)
+                cv2.imwrite(large_path, large_img)
+                img_info = {}
+                img_info['file_name'] = file_name
+                img_info['group'] = item
+                img_info['desc'] = ''
+                img_info['small'] = os.path.join(self._img_base_dir, small_path).replace('\\', '/')
+                img_info['large'] = os.path.join(self._img_base_dir, large_path).replace('\\', '/')
+                img_info['small_width'] = small_img.shape[1]
+                img_info['small_height'] = small_img.shape[0]
+                img_info['large_width'] = large_img.shape[1]
+                img_info['large_height'] = large_img.shape[0]
+                image_json.append(img_info)
 
-        image_info['small'] = self.small_url + '/' + image_name
-        image_info['middle'] = self.middle_url + '/' + image_name
-        image_info['small_width'] = small_shape[0]
-        image_info['small_height'] = small_shape[1]
-        image_info['middle_width'] = middle_shape[0]
-        image_info['middle_height'] = middle_shape[1]
-        image_info['desc'] = ''
-        image_info['type'] = self.type
-        image_info['name'] = image_name
-        image_info['id'] = image_name
-        self.image_json.append(image_info)
-        print(image_name, ' process finish')
+        image_json = list(sorted(image_json, key=lambda x: x['group']))
+        with open(os.path.join(self._json_path, 'image_json.js'), 'w', encoding='utf-8') as w:
+            w.write('var image_json = ')
+            json.dump(image_json, w, indent=4)
 
     def get_small_shape(self, shape):
         width = shape[1]
         height = shape[0]
-        if width >= 5000:
-            return (width // 10, height // 10)
-        elif 2000 < width < 5000:
-            return (width // 8, height // 8)
-        elif width <= 2000:
-            return (width // 3, height // 3)
+        if width > height:
+            new_width = self._small_size
+            height = new_width * (height / width)
+            return (int(new_width), int(height))
+        else:
+            new_height = self._small_size
+            width = new_height * (width / height)
+            return (int(width), int(new_height))
 
-    def get_middle_shape(self, shape):
+    def get_large_shape(self, shape):
         width = shape[1]
         height = shape[0]
 
         if width > height:
-            new_width = 1920
+            new_width = self._large_size
             height = new_width * (height / width)
             return (int(new_width), int(height))
         else:
-            new_height = 1920
+            new_height = self._large_size
             width = new_height * (width / height)
             return (int(width), int(new_height))
 
-    def list_image(self):
-        data_path = self.__data_path
-        save_path = self.__save_path
-        file_list = os.listdir(data_path) 
-        for files in file_list:
-            # create direction for show
-            img_dir = os.path.join(save_path, files)
-            if not os.path.exists(img_dir):
-                os.mkdir(img_dir)
-            self.__small_path = os.path.join(img_dir, 'small')
-            if not os.path.exists(self.__small_path):
-                os.mkdir(self.__small_path)
-            self.__middle_path = os.path.join(img_dir, 'middle')
-            if not os.path.exists(self.__middle_path):
-                os.mkdir(self.__middle_path)
-            self.small_url = self.request_base_dir + '/' + files + '/small'
-            self.middle_url = self.request_base_dir + '/' + files + '/middle'
-            self.type = files
-
-            # read origin data
-            origin_img_dir = os.path.join(data_path, files)
-            img_list = os.listdir(origin_img_dir)
-            for img in img_list:
-                if img.find('.') != -1:
-                    image = cv2.imread(os.path.join(origin_img_dir, img))
-                    self.resize_picture(image, img)
-
-        self.image_json = list(sorted(self.image_json, key=lambda x: x['id']))
-        with open('image_json.json', 'w', encoding='utf-8') as w:
-            json.dump(self.image_json, w)
+    def convert_image(self, img):
+        shape = img.shape
+        small_shape = self.get_small_shape(shape)
+        small_img = cv2.resize(img, small_shape)
+        large_shape = self.get_large_shape(shape)
+        large_img = cv2.resize(img, large_shape)
+        return small_img, large_img
 
 
 if __name__ == '__main__':
     data_path = 'origin'
     save_path = 'show'
-    ci = ConvertImage(data_path, save_path)
+    ci = PicturesPreprocess(data_path, save_path)

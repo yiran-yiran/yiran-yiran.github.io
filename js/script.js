@@ -1,38 +1,62 @@
 var vm = avalon.define({
+    // $id: 'yiran',
+    // img_list: [],
+    // img_1_list: [],
+    // img_2_list: [],
+    // img_3_list: [],
+    // show_image_url: '',
+    // large_image_name: '',
+    // large_image_desc: '',
+    // load_image: false,
+    // imageLayout: function () {
+    //     image_json.forEach(function (item) {
+    //         console.log(item);
+    //         item['flex'] = item.small_width * 200 / item.small_height;
+    //         item['show_desc'] = false;
+    //         if (item.group === "00000000") {
+    //             vm.img_1_list.push(item);
+    //         } else if (item.group === '20230101') {
+    //             vm.img_2_list.push(item);
+    //         } else if (item.group === '20221030') {
+    //             vm.img_3_list.push(item);
+    //         }
+    //     })
+    // },
+
     $id: 'yiran',
-    img_list: [],
-    img_1_list: [],
-    img_2_list: [],
-    img_3_list: [],
     show_image_url: '',
-    middle_image_name: '',
-    middle_image_desc: '',
+    large_image_name: '',
+    large_image_desc: '',
     load_image: false,
+    groups: [],
+    group_list: [],
     imageLayout: function () {
-        image_json.forEach(function (item) {
-            console.log(item);
-            item['flex'] = item.small_width * 200 / item.small_height;
-            item['show_desc'] = false;
-            if (item.type === "00000000") {
-                vm.img_1_list.push(item);
-            } else if (item.type === '20230101') {
-                vm.img_2_list.push(item);
-            } else if (item.type === '20221031') {
-                vm.img_3_list.push(item);
+        image_json.forEach(function (img_item) {
+            img_item['flex'] = img_item.small_width * 200 / img_item.small_height;
+            img_item['show_desc'] = false;
+            if(img_item['group'] in vm.groups) {
+                vm.groups[img_item['group']].push(img_item);
             }
-        })
+            else {
+                vm.groups[img_item['group']] = [];
+            }
+        });
+        group_json.forEach(function (item) {
+            item['pictures'] = vm.groups[item['group_id']];
+            vm.group_list.push(item);
+        });
     },
 
-    show_middle_image: function (img) {
+    show_large_image: function (img) {
         console.log($(window).width());
         if ($(window).width() > 720) {
             vm.show_image_url = "";
 
             var win_height = $(window).scrollTop() - $(window).height();
-            vm.show_image_url = img.middle;
-            vm.middle_image_desc = img.desc;
-            vm.middle_image_name = img.name;
-            var pic = $('#middle_picture');
+            vm.show_image_url = img.large;
+            vm.large_image_desc = img.desc;
+            vm.large_image_name = img.name;
+            var pic = $('#large_picture');
             console.log("win:", win_height);
             pic.fadeIn({
                 duration: 500
@@ -43,31 +67,31 @@ var vm = avalon.define({
             } else {
                 pic.css('top', win_height + 50 + 'px');
             }
-            var img_dom = $('#middle_image');
+            var img_dom = $('#large_image');
             vm.load_image = false;
             if (img.small_height > img.small_width) {
-                img_dom.css('margin-left',  $(window).width() * 0.45 - img.middle_width * 0.2 + 'px');
-                img_dom.animate({height: img.middle_height * 0.4 + 'px'});
-                img_dom.animate({width: img.middle_width * 0.4 + 'px'});
-                // img_dom.css('height', img.middle_height * 0.4 + 'px');
-                // img_dom.css('width', img.middle_width * 0.4 + 'px');
+                img_dom.css('margin-left',  $(window).width() * 0.45 - img.large_width * 0.2 + 'px');
+                img_dom.animate({height: img.large_height * 0.4 + 'px'});
+                img_dom.animate({width: img.large_width * 0.4 + 'px'});
+                // img_dom.css('height', img.large_height * 0.4 + 'px');
+                // img_dom.css('width', img.large_width * 0.4 + 'px');
             } else {
-                img_dom.css('margin-left',  $(window).width() * 0.45 - img.middle_width * 0.2 + 'px');
-                img_dom.animate({height: img.middle_height * 0.4 + 'px'});
-                img_dom.animate({width: img.middle_width * 0.4 + 'px'});
-                // img_dom.css('height', img.middle_height * 0.4 + 'px');
-                // img_dom.css('width', img.middle_width * 0.4 + 'px');
+                img_dom.css('margin-left',  $(window).width() * 0.45 - img.large_width * 0.2 + 'px');
+                img_dom.animate({height: img.large_height * 0.4 + 'px'});
+                img_dom.animate({width: img.large_width * 0.4 + 'px'});
+                // img_dom.css('height', img.large_height * 0.4 + 'px');
+                // img_dom.css('width', img.large_width * 0.4 + 'px');
             }
         }
     },
 
     select_image: function (img) {
-        img.small_height += 10;
+        img.small_height += 2;
         img['flex'] = img.small_width * 200 / img.small_height;
     },
 
     cancel_select: function (img) {
-        img.small_height -= 10;
+        img.small_height -= 2;
         img['flex'] = img.small_width * 200 / img.small_height;
     },
 
@@ -85,7 +109,7 @@ var vm = avalon.define({
 });
 
 $(document).ready(function () {
-    $('#middle_picture').fadeOut({
+    $('#large_picture').fadeOut({
         duration: 10
     });
     
@@ -107,12 +131,12 @@ $(document).ready(function () {
     vm.imageLayout();
 
     $(document).dblclick(function () {
-        var pic = $('#middle_picture');
+        var pic = $('#large_picture');
         pic.fadeOut({
             duration: 500
         })
     });
-    document.getElementById('middle_image').onload = function (e) {
+    document.getElementById('large_image').onload = function (e) {
         vm.load_image = false;
     }
 
@@ -120,7 +144,7 @@ $(document).ready(function () {
 
 
 function hide_image() {
-    var pic = $('#middle_picture');
+    var pic = $('#large_picture');
     pic.fadeOut({
         duration: 500
     })
