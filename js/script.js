@@ -1,48 +1,24 @@
 var vm = avalon.define({
-    // $id: 'yiran',
-    // img_list: [],
-    // img_1_list: [],
-    // img_2_list: [],
-    // img_3_list: [],
-    // show_image_url: '',
-    // large_image_name: '',
-    // large_image_desc: '',
-    // load_image: false,
-    // imageLayout: function () {
-    //     image_json.forEach(function (item) {
-    //         console.log(item);
-    //         item['flex'] = item.small_width * 200 / item.small_height;
-    //         item['show_desc'] = false;
-    //         if (item.group === "00000000") {
-    //             vm.img_1_list.push(item);
-    //         } else if (item.group === '20230101') {
-    //             vm.img_2_list.push(item);
-    //         } else if (item.group === '20221030') {
-    //             vm.img_3_list.push(item);
-    //         }
-    //     })
-    // },
-
     $id: 'yiran',
     show_image_url: '',
     large_image_name: '',
     large_image_desc: '',
     load_image: false,
-    groups: [],
     group_list: [],
     imageLayout: function () {
+        groups = [];
         image_json.forEach(function (img_item) {
             img_item['flex'] = img_item.small_width * 200 / img_item.small_height;
             img_item['show_desc'] = false;
-            if(img_item['group'] in vm.groups) {
-                vm.groups[img_item['group']].push(img_item);
+            if(img_item['group'] in groups) {
+                groups[img_item['group']].push(img_item);
             }
             else {
-                vm.groups[img_item['group']] = [];
+                groups[img_item['group']] = [];
             }
         });
         group_json.forEach(function (item) {
-            item['pictures'] = vm.groups[item['group_id']];
+            item['pictures'] = groups[item['group_id']];
             vm.group_list.push(item);
         });
     },

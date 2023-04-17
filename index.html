@@ -69,6 +69,8 @@
 <!--//banner-->
 
 <div class="wrapper">
+    <div id="photo_group"></div>
+
     <div ms-for="group in @group_list">
         <div class="item_title">
             <span class="span_text">{{group.desc}}</span>
@@ -87,58 +89,6 @@
             </div>
         </section>
     </div>
-
-
-    <!-- <div class="item_title">
-        <span class="span_text">我们的日常</span>
-        <span class="time_text">~2023.10.30~</span>
-    </div>
-    <section>
-        <div ms-for="img in @img_1_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
-             ms-mouseleave="@cancel_select(img)"
-             ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_large_image(img)">
-            <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
-            <img :attr="{src: img.small, alt: img.desc}" class="img">
-            <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.file_name + 'desc'}">
-                <h4 class="desc_text">{{img.file_name}}</h4>
-                <p class="desc_text">{{img.desc}}</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="item_title">
-        <span class="span_text">山城跨年</span>
-        <span class="time_text">2023.01.01</span>
-    </div>
-    <section>
-        <div ms-for="img in @img_2_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
-             ms-mouseleave="@cancel_select(img)"
-             ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_large_image(img)">
-            <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
-            <img :attr="{src: img.small, alt: img.desc}" class="img">
-            <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.id + 'desc'}">
-                <h4 class="desc_text">{{img.name}}</h4>
-                <p class="desc_text">{{img.desc}}</p>
-            </div>
-        </div>
-    </section>
-
-    <div class="item_title">
-        <span class="span_text">心照而宣</span>
-        <span class="time_text">2022.10.30</span>
-    </div>
-    <section>
-        <div ms-for="img in @img_3_list" class="img_layout flex_img" :mouseenter="@select_image(img)"
-             ms-mouseleave="@cancel_select(img)"
-             ms-css="{width: img.flex + 'px', 'flex-grow': img.flex}" ms-click="@show_large_image(img)">
-            <i ms-css="{paddingBottom: img.small_height / img.small_width * 100 + '%'}"></i>
-            <img :attr="{src: img.small, alt: img.desc}" class="img">
-            <div ms-visible="@img.show_desc == true" class="photo_desc" :attr="{id: img.id + 'desc'}">
-                <h4 class="desc_text">{{img.name}}</h4>
-                <p class="desc_text">{{img.desc}}</p>
-            </div>
-        </div>
-    </section> -->
 
     <div class="myModal" id="large_picture" title="双击可以退出大图模式">
         <div ms-visible="@load_image == true" class="load_img" id="load_img">
