@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+import sys
 import json
 import shutil
 
@@ -11,13 +12,12 @@ def check_path(path):
 
 
 class PicturesPreprocess:
-    def __init__(self, data_path, save_path):
-        self._data_path = data_path
-        self._save_path = save_path
+    def __init__(self):
+        self._data_path = 'origin'
+        self._save_path = 'show'
+        self._img_base_dir = 'pictures'
         self._small_size = 300
         self._large_size = 1800
-        self._img_base_dir = 'pictures'
-        self._json_path = '../js'
 
         if os.path.exists(self._save_path):
             shutil.rmtree(self._save_path)
@@ -66,7 +66,7 @@ class PicturesPreprocess:
                 image_json.append(img_info)
 
         image_json = list(sorted(image_json, key=lambda x: x['group']))
-        with open(os.path.join(self._json_path, 'image_json.js'), 'w', encoding='utf-8') as w:
+        with open('image_json.js', 'w', encoding='utf-8') as w:
             w.write('var image_json = ')
             json.dump(image_json, w, indent=4)
 
@@ -105,6 +105,10 @@ class PicturesPreprocess:
 
 
 if __name__ == '__main__':
-    data_path = 'origin'
-    save_path = 'show'
-    ci = PicturesPreprocess(data_path, save_path)
+    current_path = os.path.abspath(__file__)
+    base_path = os.path.dirname(current_path)
+    if len(sys.argv) == 2:
+        base_path = sys.argv[1]
+    print('work path : ', base_path)
+    os.chdir(base_path)
+    ci = PicturesPreprocess()

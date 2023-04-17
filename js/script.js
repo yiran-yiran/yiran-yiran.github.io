@@ -139,7 +139,7 @@ function get_days() {
 }
 
 function change_background() {
-    var attr = "url('pictures/back/" + randomNum(1, 6) + ".jpg')";
+    var attr = "url('pictures/background/" + randomNum(1, 6) + ".jpg')";
     $('.banner').css("background-image", attr);
 }
 
